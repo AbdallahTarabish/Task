@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TaskRequest;
 use App\Task;
 use Illuminate\Http\Request;
 
@@ -33,10 +34,21 @@ class TaskController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TaskRequest $request)
     {
-        //
+
+        $task = Task::create([
+            'name' => $request->name,
+            'priority' => $request->priority,
+            'user_id' => auth()->user()->id,
+        ]);
+        if ($task) {
+            return success('Task created successfully');
+        } else {
+            return error('Something went wrong');
+        }
     }
+
 
     /**
      * Display the specified resource.
@@ -57,7 +69,6 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        //
     }
 
     /**
@@ -69,7 +80,16 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
-        //
+        if ($task) {
+            $task->update([
+                'name' => $request->name,
+                'priority' => $request->priority,
+            ]);
+
+            return success('Task updated successfully');
+        } else {
+            return error('Something went wrong');
+        }
     }
 
     /**
@@ -80,6 +100,6 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        //
+        $task->delete();
     }
 }
