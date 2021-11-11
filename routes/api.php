@@ -18,5 +18,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(["prefix" => "user", "as" => "user.", "middleware" => "auth:api"], function () {
     Route::resource('task', TaskController::class);
+    Route::put("task/re-order", "\App\Http\Controllers\TaskController@reorderPriority");
 });
 Route::post("login", "\App\Http\Controllers\UserAuthController@login");
