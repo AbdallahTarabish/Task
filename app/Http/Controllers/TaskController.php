@@ -15,11 +15,11 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::query()->select('id', 'name', 'priority', 'status')->paginate(10);
+        $tasks = Task::query()->select('id', 'name', 'priority')->paginate(10);
         if ($tasks->count() > 0) {
-            success('Tasks', $tasks);
+          return  success('Tasks', $tasks);
         } else {
-            error('No tasks found');
+           return error('No tasks found');
         }
     }
 
@@ -41,11 +41,10 @@ class TaskController extends Controller
      */
     public function store(TaskRequest $request)
     {
-
         $task = Task::create([
             'name' => $request->name,
             'priority' => $request->priority,
-            'user_id' => auth()->user()->id,
+            'user_id' => auth("api")->user()->id,
         ]);
         if ($task) {
             return success('Task created successfully');
@@ -83,8 +82,9 @@ class TaskController extends Controller
      * @param  \App\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Task $task)
+    public function update(Request $request, $id)
     {
+        $task=Task::query()->where("id" , $id);
         if ($task) {
             $task->update([
                 'name' => $request->name,
@@ -103,8 +103,10 @@ class TaskController extends Controller
      * @param  \App\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Task $task)
+    public function destroy($id)
     {
+        $task=Task::query()->where("id" , $id);
+
         if ($task) {
             $task->delete();
             return success('Task deleted successfully');

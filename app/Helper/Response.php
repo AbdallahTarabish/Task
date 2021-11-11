@@ -1,21 +1,23 @@
-<?
-function response($code, $message, $data = [])
-{
-    $response = [
-        'code' => $code,
-        'message' => $message,
-        'data' => $data
-    ];
-    return $response;
-}
+<?php
+
+
 function success($message, $data = [])
 {
-    return response(200, $message, $data);
+    return response()->json([
+        "message"=> $message,
+        "code"=>200,
+            "data"=>$data
+    ]);
+
 }
 
 function error($message, $data = [])
 {
-    return response(400, $message, $data);
+    return response()->json([
+        "message"=> $message,
+        "code"=>402,
+        "data"=>$data
+    ]);
 }
 
 function notFound($message = 'Not Found')
