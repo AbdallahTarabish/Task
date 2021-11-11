@@ -15,11 +15,12 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::query()->select('id', 'name', 'priority')->paginate(10);
+        $tasks = Task::query()->select('id', 'name', 'priority')
+            ->orderBy("priority", "DESC")->paginate(10);
         if ($tasks->count() > 0) {
-          return  success('Tasks', $tasks);
+            return  success('Tasks', $tasks);
         } else {
-           return error('No tasks found');
+            return error('No tasks found');
         }
     }
 
@@ -84,7 +85,7 @@ class TaskController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $task=Task::query()->where("id" , $id);
+        $task = Task::query()->where("id", $id);
         if ($task) {
             $task->update([
                 'name' => $request->name,
@@ -105,11 +106,24 @@ class TaskController extends Controller
      */
     public function destroy($id)
     {
-        $task=Task::query()->where("id" , $id);
+        $task = Task::query()->where("id", $id);
 
         if ($task) {
             $task->delete();
             return success('Task deleted successfully');
+        } else {
+            return error('Something went wrong');
+        }
+    }
+
+    public function reorderPriority($id)
+    {
+        $task = Task::query()->where("id", $id);
+        if ($task) {
+            $task->update([
+                'priority' => $task->priority,
+            ]);
+            return success('Task reordered successfully');
         } else {
             return error('Something went wrong');
         }
