@@ -1,5 +1,7 @@
 <?php
 
+use App\Task;
+use App\User;
 use Illuminate\Database\Seeder;
 
 class TaskSeeder extends Seeder
@@ -12,5 +14,10 @@ class TaskSeeder extends Seeder
     public function run()
     {
         //
+        $task = new Task();
+        $task->name = "Task 1";
+        $task->priority = 2;
+        $task->user_id = User::query()->first()->id;
+        $task->save();
     }
 }

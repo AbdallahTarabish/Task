@@ -15,7 +15,12 @@ class TaskController extends Controller
      */
     public function index()
     {
-        //
+        $tasks = Task::query()->select('id', 'name', 'priority', 'status')->paginate(10);
+        if ($tasks->count() > 0) {
+            success('Tasks', $tasks);
+        } else {
+            error('No tasks found');
+        }
     }
 
     /**
@@ -100,6 +105,11 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        $task->delete();
+        if ($task) {
+            $task->delete();
+            return success('Task deleted successfully');
+        } else {
+            return error('Something went wrong');
+        }
     }
 }
